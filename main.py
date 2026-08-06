@@ -26,15 +26,15 @@ class QuizGame:
                 5
             )
 
-            if choice == "1":
+            if choice == 1:
                 self.play_quiz()
-            elif choice == "2":
+            elif choice == 2:
                 self.add_quiz()
-            elif choice == "3":
+            elif choice == 3:
                 self.show_quiz_list()
-            elif choice == "4":
+            elif choice == 4:
                 self.show_score()
-            elif choice == "5":
+            elif choice == 5:
                 print("프로그램을 종료합니다.")
                 break
             else:
