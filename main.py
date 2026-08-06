@@ -20,7 +20,11 @@ class QuizGame:
     def run(self):
         while True:
             self.show_menu()
-            choice = input("선택: ").strip()
+            choice = self.get_valid_number(
+                "메뉴를 선택하세요: ",
+                1,
+                5
+            )
 
             if choice == "1":
                 self.play_quiz()
@@ -71,6 +75,26 @@ class QuizGame:
         print("5. 종료")
         print("=" * 40)
 
+    def get_valid_number(self, prompt, min_value, max_value):
+        while True:
+            user_input = input(prompt).strip()
+
+            if user_input == "":
+                print("입력값이 비어 있습니다. 숫자를 입력해주세요.")
+                continue
+
+            try:
+                number = int(user_input)
+            except ValueError:
+                print(f"숫자가 아닌 값입니다. {min_value}부터 {max_value} 사이의 숫자를 입력해주세요.")
+                continue
+
+            if number < min_value or number > max_value:
+                print(f"범위를 벗어났습니다. {min_value}부터 {max_value} 사이의 숫자를 입력해주세요.")
+                continue
+
+            return number
+
     def play_quiz(self):
         if not self.quizzes:
             print("등록된 퀴즈가 없습니다.")
@@ -84,13 +108,11 @@ class QuizGame:
             print(f"\n[{index}번 문제]")
             quiz.display()
 
-            user_input = input("정답 번호를 입력하세요: ").strip()
-
-            if not user_input.isdigit():
-                print("숫자를 입력해야 합니다. 오답 처리됩니다.")
-                continue
-
-            user_answer = int(user_input)
+            user_answer = self.get_valid_number(
+                "정답 번호를 입력하세요: ",
+                1,
+                len(quiz.choices)
+            )
 
             if quiz.check_answer(user_answer):
                 print("정답입니다!")
