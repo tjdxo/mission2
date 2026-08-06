@@ -1,3 +1,5 @@
+import json
+
 class Quiz:
     def __init__(self, question, choices, answer):
         self.question = question
@@ -12,10 +14,69 @@ class Quiz:
     def check_answer(self, user_answer):
         return self.answer == user_answer
 
+    def to_dict(self):
+        return {
+            "question": self.question,
+            "choices": self.choices,
+            "answer": self.answer
+        }
+
+    @classmethod
+    def from_dict(cls, data):
+        return cls(
+            data["question"],
+            data["choices"],
+            int(data["answer"])
+        )
+
 class QuizGame:
+    STATE_FILE = "state.json"
     def __init__(self):
-        self.quizzes = self.create_default_quizzes()
-        self.best_score = 0
+        self.quizzes = []
+        self.score = 0
+        self.total_answered = 0
+        self.load_state()
+
+    def save_state(self):
+            data = {
+                "quizzes": [
+                    quiz.to_dict()
+                    for quiz in self.quizzes
+                ],
+                "score": self.score,
+                "total_answered": self.total_answered
+            }
+
+            with open(self.STATE_FILE, "w", encoding="utf-8") as file:
+                json.dump(data, file, ensure_ascii=False, indent=4)
+
+    def load_state(self):
+        try:
+            with open(self.STATE_FILE, "r", encoding="utf-8") as file:
+                data = json.load(file)
+
+            self.quizzes = [
+                Quiz.from_dict(quiz_data)
+                for quiz_data in data.get("quizzes", [])
+            ]
+
+            self.score = data.get("score", 0)
+            self.total_answered = data.get("total_answered", 0)
+
+        except FileNotFoundError:
+            self.quizzes = self.get_default_quizzes()
+            self.score = 0
+            self.total_answered = 0
+            self.save_state()
+
+        except json.JSONDecodeError:
+            print("state.json 파일을 읽는 중 오류가 발생했습니다.")
+            print("기본 데이터로 초기화합니다.")
+
+            self.quizzes = self.get_default_quizzes()
+            self.score = 0
+            self.total_answered = 0
+            self.save_state()
 
     def run(self):
         while True:
@@ -40,7 +101,7 @@ class QuizGame:
             else:
                 print("잘못된 입력입니다.")
 
-    def create_default_quizzes(self):
+    def get_default_quizzes(self):
         return [
             Quiz(
                 "소프트웨어 생명주기 모형 중 순차적으로 진행되는 모델은?",
@@ -128,6 +189,8 @@ class QuizGame:
         print("\n퀴즈가 종료되었습니다.")
         print(f"점수: {score} / {len(self.quizzes)}")
 
+        self.save_state()
+
         if score > self.best_score:
             self.best_score = score
             print("최고 점수가 갱신되었습니다!")
@@ -166,7 +229,10 @@ class QuizGame:
         new_quiz = Quiz(question, choices, answer)
         self.quizzes.append(new_quiz)
 
+        self.save_state()
+
         print("퀴즈가 추가되었습니다.")
+
     def show_quiz_list(self):
         print("\n퀴즈 목록")
 
