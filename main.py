@@ -35,20 +35,22 @@ class QuizGame:
         self.quizzes = []
         self.score = 0
         self.total_answered = 0
+        self.best_score = 0
         self.load_state()
 
     def save_state(self):
-            data = {
-                "quizzes": [
-                    quiz.to_dict()
-                    for quiz in self.quizzes
-                ],
-                "score": self.score,
-                "total_answered": self.total_answered
-            }
+        data = {
+            "quizzes": [
+                quiz.to_dict()
+                for quiz in self.quizzes
+            ],
+            "score": self.score,
+            "total_answered": self.total_answered,
+            "best_score": self.best_score
+        }
 
-            with open(self.STATE_FILE, "w", encoding="utf-8") as file:
-                json.dump(data, file, ensure_ascii=False, indent=4)
+        with open(self.STATE_FILE, "w", encoding="utf-8") as file:
+            json.dump(data, file, ensure_ascii=False, indent=4)
 
     def load_state(self):
         try:
@@ -62,11 +64,13 @@ class QuizGame:
 
             self.score = data.get("score", 0)
             self.total_answered = data.get("total_answered", 0)
+            self.best_score = data.get("best_score", 0)
 
         except FileNotFoundError:
             self.quizzes = self.get_default_quizzes()
             self.score = 0
             self.total_answered = 0
+            self.best_score = 0
             self.save_state()
 
         except json.JSONDecodeError:
@@ -76,6 +80,7 @@ class QuizGame:
             self.quizzes = self.get_default_quizzes()
             self.score = 0
             self.total_answered = 0
+            self.best_score = 0
             self.save_state()
 
     def run(self):
@@ -189,11 +194,14 @@ class QuizGame:
         print("\n퀴즈가 종료되었습니다.")
         print(f"점수: {score} / {len(self.quizzes)}")
 
-        self.save_state()
+        self.score = score
+        self.total_answered = len(self.quizzes)
 
         if score > self.best_score:
             self.best_score = score
             print("최고 점수가 갱신되었습니다!")
+
+        self.save_state()
 
     def add_quiz(self):
         print("\n퀴즈 추가")
