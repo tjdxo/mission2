@@ -133,7 +133,40 @@ class QuizGame:
             print("최고 점수가 갱신되었습니다!")
 
     def add_quiz(self):
-        print("퀴즈 추가 기능은 아직 구현 전입니다.")
+        print("\n퀴즈 추가")
+
+        while True:
+            question = input("문제를 입력하세요: ").strip()
+
+            if question == "":
+                print("문제는 비워둘 수 없습니다.")
+                continue
+
+            break
+
+        choices = []
+
+        for index in range(1, 5):
+            while True:
+                choice = input(f"{index}번 보기를 입력하세요: ").strip()
+
+                if choice == "":
+                    print("보기는 비워둘 수 없습니다.")
+                    continue
+
+                choices.append(choice)
+                break
+
+        answer = self.get_valid_number(
+            "정답 번호를 입력하세요: ",
+            1,
+            len(choices)
+        )
+
+        new_quiz = Quiz(question, choices, answer)
+        self.quizzes.append(new_quiz)
+
+        print("퀴즈가 추가되었습니다.")
 
     def show_quiz_list(self):
         print("퀴즈 목록 기능은 아직 구현 전입니다.")
