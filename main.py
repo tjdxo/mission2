@@ -167,9 +167,20 @@ class QuizGame:
         self.quizzes.append(new_quiz)
 
         print("퀴즈가 추가되었습니다.")
-
     def show_quiz_list(self):
-        print("퀴즈 목록 기능은 아직 구현 전입니다.")
+        print("\n퀴즈 목록")
+
+        if len(self.quizzes) == 0:
+            print("등록된 퀴즈가 없습니다.")
+            return
+
+        for index, quiz in enumerate(self.quizzes, start=1):
+            print(f"\n[{index}] {quiz.question}")
+
+            for choice_index, choice in enumerate(quiz.choices, start=1):
+                print(f"  {choice_index}. {choice}")
+
+            print(f"  정답: {quiz.answer}번")
 
     def show_score(self):
         print(f"현재 최고 점수: {self.best_score}점")
