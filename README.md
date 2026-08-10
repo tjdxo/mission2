@@ -815,6 +815,58 @@ venv/
 
 ---
 
+## Git Clone / Pull 로그 이력
+
+### 1. Git Clone
+
+원격 저장소를 로컬 Desktop 경로에 복제하였다.
+
+```bash
+tjdxo9514764@c6r9s8 Desktop % git clone https://github.com/tjdxo/mission2.git
+'mission2'에 복제합니다...
+remote: Enumerating objects: 57, done.
+remote: Counting objects: 100% (57/57), done.
+remote: Compressing objects: 100% (34/34), done.
+remote: Total 57 (delta 26), reused 49 (delta 18), pack-reused 0 (from 0)
+오브젝트를 받는 중: 100% (57/57), 21.39 KiB | 7.13 MiB/s, 완료.
+델타를 알아내는 중: 100% (26/26), 완료.
+```
+
+### 2. Clone 확인
+
+`ls` 명령어로 `mission2` 폴더가 생성된 것을 확인하였다.
+
+```bash
+tjdxo9514764@c6r9s8 Desktop % ls
+mission2                        무제 폴더
+```
+
+### 3. 프로젝트 폴더 이동
+
+복제된 `mission2` 폴더로 이동하였다.
+
+```bash
+tjdxo9514764@c6r9s8 Desktop % cd mission2
+```
+
+### 4. Git Pull 확인
+
+원격 저장소와 로컬 저장소가 최신 상태인지 확인하였다.
+
+```bash
+tjdxo9514764@c6r9s8 mission2 % git pull
+이미 업데이트 상태입니다.
+```
+
+### 정리
+
+- `git clone`을 통해 원격 저장소를 로컬 환경에 복제하였다.
+- `ls` 명령어로 복제된 `mission2` 폴더 생성을 확인하였다.
+- `cd mission2`로 프로젝트 폴더에 진입하였다.
+- `git pull` 결과 이미 최신 상태임을 확인하였다.
+
+---
+
 ## 프로젝트를 통해 배운 점
 
 이 프로젝트를 통해 단순히 Python 문법만 사용하는 것이 아니라, 실제 프로그램처럼 데이터를 저장하고 불러오며 예외 상황을 처리하는 흐름을 연습했습니다.
